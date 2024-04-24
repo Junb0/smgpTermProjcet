@@ -1,4 +1,4 @@
-package kr.ac.tukorea.ge.spgp.memecatdefense;
+package kr.ac.tukorea.ge.spgp.memecatdefense.app;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class MainActivity extends AppCompatActivity {
 

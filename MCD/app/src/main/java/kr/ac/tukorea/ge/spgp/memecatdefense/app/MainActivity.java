@@ -1,6 +1,8 @@
 package kr.ac.tukorea.ge.spgp.memecatdefense.app;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,5 +25,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            startActivity(new Intent(this, MemeCatDefenseActivity.class));
+        }
+        return super.onTouchEvent(event);
     }
 }

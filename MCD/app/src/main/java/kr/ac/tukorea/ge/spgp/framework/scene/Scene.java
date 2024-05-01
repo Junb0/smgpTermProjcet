@@ -6,8 +6,8 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
-import kr.ac.tukorea.ge.spgp2024.framework.activity.GameActivity;
-import kr.ac.tukorea.ge.spgp2024.framework.interfaces.IGameObject;
+import kr.ac.tukorea.ge.spgp.framework.activity.GameActivity;
+import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
 
 public class Scene {
 

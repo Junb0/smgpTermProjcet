@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
-import kr.ac.tukorea.ge.spgp2024.framework.view.GameView;
+import kr.ac.tukorea.ge.spgp.framework.view.GameView;
 
 public class BitmapPool {
     private static final String TAG = BitmapPool.class.getSimpleName();

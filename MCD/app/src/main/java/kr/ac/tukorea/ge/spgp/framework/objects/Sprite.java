@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 
-import kr.ac.tukorea.ge.spgp2024.framework.interfaces.IGameObject;
-import kr.ac.tukorea.ge.spgp2024.framework.res.BitmapPool;
+import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
+import kr.ac.tukorea.ge.spgp.framework.res.BitmapPool;
 
 public class Sprite implements IGameObject {
     protected Bitmap bitmap;

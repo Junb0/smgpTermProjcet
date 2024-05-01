@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-import kr.ac.tukorea.ge.spgp2024.framework.view.GameView;
+import kr.ac.tukorea.ge.spgp.framework.view.GameView;
 
 public class GameActivity extends AppCompatActivity {
 

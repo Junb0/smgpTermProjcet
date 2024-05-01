@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
+import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
 
 public class MainActivity extends AppCompatActivity {
 

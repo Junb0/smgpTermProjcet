@@ -11,9 +11,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import kr.ac.tukorea.ge.spgp2024.dragonflight.BuildConfig;
-import kr.ac.tukorea.ge.spgp2024.framework.interfaces.IGameObject;
-import kr.ac.tukorea.ge.spgp2024.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp.memecatdefense.BuildConfig;
+import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
+import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 
 
 //import android.util.AttributeSet;

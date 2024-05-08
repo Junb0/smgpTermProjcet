@@ -9,11 +9,12 @@ import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 public class MainScene extends Scene {
     private static final String TAG = MainScene.class.getSimpleName();
     public enum Layer {
-        bg, platform, item, cat, touch,ui, controller, COUNT
+        bg, platform, item, enemy, cat, touch,ui, controller, COUNT
     }
 
     private final CatSpawner catSpawner;
     private final UpgradeManager upgradeManager;
+    private final EnemySpawner enemySpawner;
     public static int gold = 100;
 
 
@@ -27,8 +28,12 @@ public class MainScene extends Scene {
         }
         catSpawner = new CatSpawner(this);
         add(Layer.controller, catSpawner);
+
         upgradeManager = new UpgradeManager();
         add(Layer.controller, upgradeManager);
+
+        enemySpawner = new EnemySpawner(this);
+        add(Layer.controller, enemySpawner);
 
         add(Layer.ui, new TextUI());
 

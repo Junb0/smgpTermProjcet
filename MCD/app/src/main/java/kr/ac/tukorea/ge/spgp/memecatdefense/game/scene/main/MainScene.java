@@ -12,7 +12,9 @@ public class MainScene extends Scene {
         bg, platform, item, cat, ui, touch, controller, COUNT
     }
 
-    public final int[] slot = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+    private final CatSpawner catSpawner;
+
+    public int[] slot = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
     public MainScene() {
         initLayers(Layer.COUNT);
@@ -22,10 +24,14 @@ public class MainScene extends Scene {
             Cat cat = Cat.get(i, Cat.CatType.applecat, 1);
             add(Layer.cat, cat);
         }
+        catSpawner = new CatSpawner(this);
+        add(Layer.controller, catSpawner);
+
 
 
         add(Layer.touch, new Button(R.mipmap.btn_spawn, 4.5f, 12.5f, 3.0f, 3.0f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
+                catSpawner.purchaseCat(action == Button.Action.pressed);
                 return true;
             }
         }));
@@ -55,5 +61,10 @@ public class MainScene extends Scene {
     @Override
     protected int getTouchLayerIndex() {
         return Layer.touch.ordinal();
+    }
+
+    @Override
+    protected int getCatLayerIndex() {
+        return Layer.cat.ordinal();
     }
 }

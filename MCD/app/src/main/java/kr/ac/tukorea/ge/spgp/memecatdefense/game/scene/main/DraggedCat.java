@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp.framework.interfaces.ITouchable;
@@ -19,22 +18,19 @@ import kr.ac.tukorea.ge.spgp.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
-import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main.DraggedCat;
-public class Cat extends Sprite implements IRecyclable, ITouchable {
+import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main.Cat;
+public class DraggedCat extends Sprite implements IRecyclable, ITouchable {
     public static final int SIZE = 188;
-    private static final Random random = new Random();
+
     private static final String TAG = Cat.class.getSimpleName();
-    public static int[] upgrade = {0,0,0,0,0};
     public int slotIdx = 0;
-    public enum CatType{
-        applecat, bananacat, happycat, maxwellcat, oiiacat, COUNT
-    }
+
 
     public int star = 1;
     public boolean isDragged = false;
 
-    protected CatType catType = CatType.applecat;
-    public Cat(){
+    protected Cat.CatType catType = Cat.CatType.applecat;
+    public DraggedCat(){
         super(R.mipmap.allcat_sheet_removebg);
         srcRect = new Rect();
     }
@@ -49,72 +45,92 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     @Override
     public boolean onTouchEvent(MotionEvent e){
         float[] pts = Metrics.fromScreen(e.getX(), e.getY());
-        if (!dstRect.contains(pts[0], pts[1]) && !isDragged) {
-            return false;
-        }
-
         int action = e.getAction();
 
-        if (action == MotionEvent.ACTION_DOWN){
-            isDragged = true;
-            Log.d(TAG, "Button.onTouch(" + System.identityHashCode(this) + ", " + e.getAction() + ", " + e.getX() + ", " + e.getY());
-            makeDraggedCatFromThis();
-        }
-        else if(action == MotionEvent.ACTION_MOVE && isDragged){
+        if(action == MotionEvent.ACTION_MOVE){
             dstRect.set(pts[0] - 0.5f, pts[1] - 0.5f, pts[0] + 0.5f, pts[1] + 0.5f);
         }
-        else if(action == MotionEvent.ACTION_UP && isDragged){
-            isDragged = false;
-            setDstRect(slotIdx);
+        else if(action == MotionEvent.ACTION_UP){
+            if( !mergeCat(getSlotIdx(pts[0], pts[1])) ) {
+                makeCatFromThis();
+            }
         }
         return true;
     }
 
-    public void starUp(){
-        if(star < 6) {
-            star += 1;
-            CatType[] types = CatType.values();
-            catType = types[random.nextInt(types.length - 1)];
-            setSrcRect(catType, star);
-        }
-    }
-
-    public void makeDraggedCatFromThis(){
-        DraggedCat draggedCat = DraggedCat.get(slotIdx, catType, star);
-        Scene scene = Scene.top();
-        if (scene == null){
-            Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
-            return;
-        }
-        scene.add(MainScene.Layer.touch, draggedCat);
-        scene.remove(MainScene.Layer.cat, this);
-    }
-
-    public static Cat get(int slotIdx, CatType type, int initstar){
-        Cat cat = (Cat) RecycleBin.get(Cat.class);
+    public static DraggedCat get(int slotIdx, Cat.CatType type, int initstar){
+        DraggedCat cat = (DraggedCat) RecycleBin.get(DraggedCat.class);
         if (cat == null){
-            cat = new Cat();
+            cat = new DraggedCat();
         }
         cat.init(slotIdx, type, initstar);
         return cat;
     }
 
-    private void init(int idx, CatType type, int initstar){
+    public void makeCatFromThis(){
+        Cat cat = Cat.get(slotIdx, catType, star);
+        Scene scene = Scene.top();
+        if (scene == null){
+            Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
+            return;
+        }
+        scene.add(MainScene.Layer.cat, cat);
+        scene.remove(MainScene.Layer.touch, this);
+    }
+
+    public boolean mergeCat(int idx){
+        if(idx == -1){
+            return false;
+        }
+        Scene scene = Scene.top();
+        if (scene == null){
+            Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
+            return false;
+        }
+        ArrayList<IGameObject> cats = scene.objectsAt(MainScene.Layer.cat);
+        int count = cats.size();
+        if(count == 0){
+            return false;
+        }
+        for(int i = count - 1; i >= 0; i--){
+            Cat cat = (Cat)cats.get(i);
+            if(cat.slotIdx == idx && cat.catType == catType && cat.star == star){
+                cat.starUp();
+                scene.remove(MainScene.Layer.touch, this);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getSlotIdx(float x, float y){
+        int calcX = (int)((x - 1.78f) / 1.08f); // 각 사각형의 너비와 x 간격을 고려
+        int calcY = (int)((y - 6.42f) / 1.04f); // 각 사각형의 높이와 y 간격을 고려
+
+        // 유효한 범위 체크
+        if (calcX < 0 || calcX >= 5 || calcY < 0 || calcY >= 3) {
+            return -1; // 좌표가 유효 범위를 벗어나면 -1 리턴
+        }
+
+        // slotIdx 계산
+        int idx = calcY * 5 + calcX;
+        return idx;
+    }
+
+    private void init(int idx, Cat.CatType type, int initstar){
         setSrcRect(type, initstar);
         setDstRect(idx);
         isDragged = false;
         star = initstar;
         slotIdx = idx;
         catType = type;
-        Log.d(TAG, "Cat.init(" + System.identityHashCode(this) + ", " + slotIdx + ", " + type + ", " + initstar);
     }
 
-    private void setSrcRect(CatType type, int star) {
+    private void setSrcRect(Cat.CatType type, int star) {
         int x = type.ordinal();
         int y = star - 1;
         int left = x * SIZE;
         int top = y * SIZE;
-        //srcRect.set(left, top, left + SIZE, top + SIZE);
         srcRect.set(left, top, left + SIZE, top + SIZE);
     }
 

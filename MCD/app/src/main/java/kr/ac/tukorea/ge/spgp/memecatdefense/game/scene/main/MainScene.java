@@ -9,12 +9,13 @@ import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 public class MainScene extends Scene {
     private static final String TAG = MainScene.class.getSimpleName();
     public enum Layer {
-        bg, platform, item, cat, ui, touch, controller, COUNT
+        bg, platform, item, cat, touch,ui, controller, COUNT
     }
 
     private final CatSpawner catSpawner;
+    private final UpgradeManager upgradeManager;
+    public static int gold = 100;
 
-    public int[] slot = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
     public MainScene() {
         initLayers(Layer.COUNT);
@@ -26,12 +27,50 @@ public class MainScene extends Scene {
         }
         catSpawner = new CatSpawner(this);
         add(Layer.controller, catSpawner);
+        upgradeManager = new UpgradeManager();
+        add(Layer.controller, upgradeManager);
 
+        add(Layer.ui, new TextUI());
 
 
         add(Layer.touch, new Button(R.mipmap.btn_spawn, 4.5f, 12.5f, 3.0f, 3.0f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 catSpawner.purchaseCat(action == Button.Action.pressed);
+                return true;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.applecat_removebg, 1f, 15.f, 1.5f, 1.5f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                upgradeManager.upgradeCat(action == Button.Action.pressed, 0);
+                return true;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.bananacat_removebg, 2.75f, 15.f, 1.5f, 1.5f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                upgradeManager.upgradeCat(action == Button.Action.pressed, 1);
+                return true;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.happycat_removebg, 4.5f, 15.f, 1.5f, 1.5f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                upgradeManager.upgradeCat(action == Button.Action.pressed, 2);
+                return true;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.maxwellcat_removebg, 6.25f, 15.f, 1.5f, 1.5f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                upgradeManager.upgradeCat(action == Button.Action.pressed, 3);
+                return true;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.oiiacat_removebg, 8f, 15.f, 1.5f, 1.5f, new Button.Callback(){
+            public boolean onTouch(Button.Action action){
+                upgradeManager.upgradeCat(action == Button.Action.pressed, 4);
                 return true;
             }
         }));

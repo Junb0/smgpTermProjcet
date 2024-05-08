@@ -23,13 +23,16 @@ import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
 import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main.Cat;
 public class CatSpawner implements IGameObject{
-    public static int price;
+    public static int price = 20;
     private final Random random = new Random();
     private final MainScene scene;
     public CatSpawner(MainScene scene) {this.scene = scene;}
 
     public boolean purchaseCat(boolean purchase){
         if(!purchase){
+            return false;
+        }
+        if(MainScene.gold < price){
             return false;
         }
         Cat.CatType[] types = Cat.CatType.values();
@@ -51,6 +54,10 @@ public class CatSpawner implements IGameObject{
 
         Cat cat = Cat.get(randomIdx, randomType, 1);
         scene.add(MainScene.Layer.cat, cat);
+
+        MainScene.gold -= price;
+
+        price += 10;
 
         return true;
     }

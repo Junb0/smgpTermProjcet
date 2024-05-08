@@ -2,21 +2,43 @@ package kr.ac.tukorea.ge.spgp.framework.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp.framework.res.BitmapPool;
 
 public class Sprite implements IGameObject {
+    private static final String TAG = Sprite.class.getSimpleName();
     protected Bitmap bitmap;
+    protected Rect srcRect;
     protected final RectF dstRect = new RectF();
     protected float x, y, dx, dy;
-    protected float width, height, radius;
+    protected float width;
+    protected float height;
+    protected float radius;
 
     public Sprite(int mipmapId) {
         if (mipmapId != 0) {
             bitmap = BitmapPool.get(mipmapId);
         }
+        Log.v(TAG, "Created " + this.getClass().getSimpleName() + "@" + System.identityHashCode(this));
+    }
+
+    public Sprite(int mipmapId, float x, float y, float width, float height) {
+        if (mipmapId != 0) {
+            bitmap = BitmapPool.get(mipmapId);
+        }
+        setPosition(x, y, width, height);
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
     }
 
     public void setPosition(float x, float y, float radius) {
@@ -44,6 +66,6 @@ public class Sprite implements IGameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, null, dstRect, null);
+        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
     }
 }

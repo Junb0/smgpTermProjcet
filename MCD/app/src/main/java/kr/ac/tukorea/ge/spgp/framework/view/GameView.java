@@ -11,7 +11,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import kr.ac.tukorea.ge.spgp.memecatdefense.BuildConfig;
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 
@@ -43,7 +42,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
 
         setFullScreen();
 
-        if (BuildConfig.DEBUG) {
+        if (Scene.drawsDebugInfo) {
             initDebugObjects();
         }
 
@@ -54,7 +53,6 @@ public class GameView extends View implements Choreographer.FrameCallback {
     //////////////////////////////////////////////////
     // Global Variable (static member) for Resources
     public static Resources res;
-    private final ArrayList<IGameObject> gameObjects = new ArrayList<>();
 
     private void initGame() {
         res = getResources();
@@ -62,6 +60,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
 
     //////////////////////////////////////////////////
     // Game Loop
+    private boolean running = true;
     private long previousNanos = 0;
     private float elapsedSeconds;
     private void scheduleUpdate() {
@@ -76,7 +75,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
             update();
         }
         invalidate();
-        if (isShown()) {
+        if (running) {
             scheduleUpdate();
         }
         previousNanos = nanos;
@@ -97,15 +96,16 @@ public class GameView extends View implements Choreographer.FrameCallback {
         }
         canvas.save();
         Metrics.concat(canvas);
-        if (BuildConfig.DEBUG) {
+        if (Scene.drawsDebugInfo) {
             canvas.drawRect(Metrics.borderRect, borderPaint);
         }
         scene.draw(canvas);
         canvas.restore();
 
-        if (BuildConfig.DEBUG) {
+        if (Scene.drawsDebugInfo) {
             int fps = (int) (1.0f / elapsedSeconds);
-            canvas.drawText("FPS: " + fps, 100f, 200f, fpsPaint);
+            int count = scene.count();
+            canvas.drawText("FPS: " + fps + " objs: " + count, 100f, 200f, fpsPaint);
         }
     }
 
@@ -151,5 +151,23 @@ public class GameView extends View implements Choreographer.FrameCallback {
         if (handled) return;
 
         Scene.pop();
+    }
+
+    public void pauseGame() {
+        running = false;
+        Scene.pauseTop();
+    }
+
+    public void resumeGame() {
+        if (running) return;
+        running = true;
+        previousNanos = 0;
+        scheduleUpdate();
+        Scene.resumeTop();
+    }
+
+    public void destroyGame() {
+        Scene.popAll();
+        res = null;
     }
 }

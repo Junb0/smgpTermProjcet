@@ -95,6 +95,9 @@
    | 8주차 | 디버깅 및 밸런스 수정, 추가 구현                        |                       |
    | 9주차 | 디버깅 및 밸런스 수정, 발표 자료 제작                   |                                        |
 
+#### 핵심 시스템 구현 예시 (소환/합성)
+![소환합성](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/spawnAndMerge.gif)
+
 #### 주차별 커밋 내역
 ![커밋횟수](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/%EC%BB%A4%EB%B0%8B%ED%9A%9F%EC%88%98.png)
 | 주차  | 횟수 |

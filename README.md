@@ -6,6 +6,11 @@
 1차 발표
 ---
 <https://youtu.be/BQJ8xp1PHGI>
+
+2차 발표
+---
+<https://youtu.be/Xqll0xLy4E8>
+
 ### 게임 컨셉
 #### High Concept
 랜덤으로 뽑은 고양이를 조합하여 적의 물량 공세를 막아내라!

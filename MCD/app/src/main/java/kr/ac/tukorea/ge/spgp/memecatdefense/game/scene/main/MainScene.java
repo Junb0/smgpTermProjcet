@@ -16,6 +16,7 @@ public class MainScene extends Scene {
     private final UpgradeManager upgradeManager;
     private final EnemySpawner enemySpawner;
     public static int gold = 100;
+    public static int playerHP = 100;
 
 
     public MainScene() {

@@ -9,10 +9,12 @@ import android.util.Log;
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp.framework.scene.RecycleBin;
+import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Enemy extends Sprite implements IRecyclable {
+    private static final String TAG = Enemy.class.getSimpleName();
     public enum Dir{
         up, right, down, COUNT
     }
@@ -62,7 +64,7 @@ public class Enemy extends Sprite implements IRecyclable {
                 dy = speed * elapsedSeconds;
                 position[1] += dy;
                 if (position[1] >= endPoint[1]){
-                    break;
+                    EnemyArrive();
                 }
                 setDstRect(position[0], position[1]);
                 break;
@@ -89,6 +91,16 @@ public class Enemy extends Sprite implements IRecyclable {
         }
         enemy.init(hp, speed);
         return enemy;
+    }
+
+    private void EnemyArrive(){
+        MainScene scene = (MainScene)Scene.top();
+
+        if (scene == null){
+            Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
+            return;
+        }
+        scene.remove(MainScene.Layer.enemy, this);
     }
 
     private void init(int hp, float speed){

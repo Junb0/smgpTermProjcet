@@ -12,7 +12,7 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Bullet extends Sprite implements IRecyclable {
     public Bullet(){
-        super(R.mipmap.enemy_square);
+        super(R.mipmap.bullet_sheet);
         srcRect = new Rect();
     }
     @Override

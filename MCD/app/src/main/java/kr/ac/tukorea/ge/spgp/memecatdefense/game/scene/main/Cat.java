@@ -126,6 +126,10 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         dstRect.set(left, top, left + 1, top + 1);
     }
 
+    public int getFinalDamage(){
+        return 0;
+    }
+
     @Override
     public void onRecycle(){
 

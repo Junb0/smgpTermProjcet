@@ -11,7 +11,7 @@ public class EnemySpawner implements IGameObject{
     private final Random random = new Random();
     private final MainScene scene;
     public EnemySpawner(MainScene scene) {this.scene = scene;}
-    private static float spawnCooltime = 3.f;
+    private static float spawnCooltime = 2.0f;
     private static float spawnElapsedSeconds = 3.f;
 
     @Override
@@ -19,7 +19,7 @@ public class EnemySpawner implements IGameObject{
         spawnElapsedSeconds += elapsedSeconds;
         if(spawnElapsedSeconds >= spawnCooltime) {
             spawnElapsedSeconds = 0.f;
-            Enemy enemy = Enemy.get(100, 0.5f);
+            Enemy enemy = Enemy.get(100, 5f);
             scene.add(MainScene.Layer.enemy, enemy);
         }
     }

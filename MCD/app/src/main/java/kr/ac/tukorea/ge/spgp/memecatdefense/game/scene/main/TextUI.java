@@ -25,11 +25,9 @@ public class TextUI implements IGameObject {
     protected static Paint upgradePaint;
     protected static Paint purchasePaint;
     protected static Paint upgradePricePaint;
-
-    protected Bitmap bitmap;
+    
     private static final String TAG = TextUI.class.getSimpleName();
     public TextUI(){
-        bitmap = BitmapPool.get(R.mipmap.applecat);
         goldPaint = new Paint();
         goldPaint.setColor(Color.argb(255, 166, 124, 0));
         goldPaint.setTextSize(70f);

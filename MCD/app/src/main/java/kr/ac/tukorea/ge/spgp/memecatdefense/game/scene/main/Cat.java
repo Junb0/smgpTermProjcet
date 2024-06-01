@@ -134,7 +134,7 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     }
 
     public void fire(){
-        
+
     }
 
     @Override

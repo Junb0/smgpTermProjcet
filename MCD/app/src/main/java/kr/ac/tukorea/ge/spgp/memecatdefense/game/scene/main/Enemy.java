@@ -100,6 +100,7 @@ public class Enemy extends Sprite implements IRecyclable {
             Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
             return;
         }
+        scene.playerHP -= 10.f;
         scene.remove(MainScene.Layer.enemy, this);
     }
 

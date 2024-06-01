@@ -25,7 +25,7 @@ public class TextUI implements IGameObject {
     protected static Paint upgradePaint;
     protected static Paint purchasePaint;
     protected static Paint upgradePricePaint;
-    
+    protected static Paint playerHPPaint;
     private static final String TAG = TextUI.class.getSimpleName();
     public TextUI(){
         goldPaint = new Paint();
@@ -46,6 +46,11 @@ public class TextUI implements IGameObject {
         purchasePaint.setColor(Color.WHITE);
         purchasePaint.setTextSize(50f);
         purchasePaint.setTextAlign(Paint.Align.CENTER);
+
+        playerHPPaint = new Paint();
+        playerHPPaint.setColor(Color.BLACK);
+        playerHPPaint.setTextSize(50f);
+        playerHPPaint.setTextAlign(Paint.Align.CENTER);
     }
     @Override
     public void update(float elapsedSeconds){
@@ -76,6 +81,10 @@ public class TextUI implements IGameObject {
             pts = Metrics.toScreen(1f + i * 1.75f, 16f);
             canvas.drawText("" + price, pts[0], pts[1] , upgradePricePaint);
         }
+
+        pts = Metrics.toScreen(7.5f, 0.5f);
+        int playerHP = MainScene.playerHP;
+        canvas.drawText("HP: " + playerHP, pts[0], pts[1], playerHPPaint);
 
         canvas.save();
         Metrics.concat(canvas);

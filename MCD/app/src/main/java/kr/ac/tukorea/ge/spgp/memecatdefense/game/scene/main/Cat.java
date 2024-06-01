@@ -32,6 +32,8 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
 
     public int star = 1;
     public boolean isDragged = false;
+    private float fireElapsedTime = 0.0f;
+    private float fireCooltime = 1.0f;
 
     protected CatType catType = CatType.applecat;
     public Cat(){
@@ -127,6 +129,7 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     }
 
     public int getFinalDamage(){
+
         return 0;
     }
 

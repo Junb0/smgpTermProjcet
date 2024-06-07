@@ -46,6 +46,12 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         if(isDragged){
             return;
         }
+
+        fireElapsedTime += elapsedSeconds;
+        if(fireElapsedTime >= fireCooltime){
+            fire();
+        }
+
     }
 
     @Override

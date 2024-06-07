@@ -28,6 +28,7 @@ public class Enemy extends Sprite implements IRecyclable {
     private static final float[] firstCornerPoint = {0.425f, 5.5f};    // 첫번째 코너
     private static final float[] secondCornerPoint = {8.46f, 5.5f}; // 두번째 코너
     private static final float[] endPoint = {8.46f, 10.5f}; // 끝 지점
+    private float totalProgress = 0.0f; // 총 진행한 거리
     protected static Paint hpPaint;
 
     public Enemy(){
@@ -50,6 +51,7 @@ public class Enemy extends Sprite implements IRecyclable {
                     position[1] = firstCornerPoint[1];
                 }
                 setDstRect(position[0], position[1]);
+                totalProgress += dy;
                 break;
             case right:
                 float dx = speed * elapsedSeconds;
@@ -59,6 +61,7 @@ public class Enemy extends Sprite implements IRecyclable {
                     position[0] = secondCornerPoint[0];
                 }
                 setDstRect(position[0], position[1]);
+                totalProgress += dx;
                 break;
             case down:
                 dy = speed * elapsedSeconds;
@@ -67,9 +70,14 @@ public class Enemy extends Sprite implements IRecyclable {
                     EnemyArrive();
                 }
                 setDstRect(position[0], position[1]);
+                totalProgress += dy;
                 break;
         }
 
+    }
+
+    public float getTotalProgress(){
+        return totalProgress;
     }
 
     @Override

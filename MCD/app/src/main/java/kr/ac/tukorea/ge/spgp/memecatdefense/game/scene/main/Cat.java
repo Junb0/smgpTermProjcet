@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IRecyclable;
@@ -98,6 +99,23 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         scene.remove(MainScene.Layer.cat, this);
     }
 
+    private Enemy findTargetEnemy(){
+        Enemy target = null;
+        ArrayList<IGameObject> Enemies = Scene.top().objectsAt(MainScene.Layer.enemy);
+        float dist = 9999.f;
+        // 선두의 Enemy 찾기
+        for (IGameObject gameObject: Enemies){
+            if(!(gameObject instanceof Enemy)) continue;
+            Enemy enemy = (Enemy) gameObject;
+            float enemyProgress = enemy.getTotalProgress();
+            if(dist > enemyProgress){
+                dist = enemyProgress;
+                target = enemy;
+            }
+        }
+        return target;
+    }
+
     public static Cat get(int slotIdx, CatType type, int initstar){
         Cat cat = (Cat) RecycleBin.get(Cat.class);
         if (cat == null){
@@ -140,7 +158,12 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     }
 
     public void fire(){
-
+        Enemy target = findTargetEnemy();
+        if(target != null) {
+            Bullet bullet = Bullet.get(this, target);
+            Scene.top().add(MainScene.Layer.bullet, bullet);
+            fireElapsedTime = 0.f;
+        }
     }
 
     @Override

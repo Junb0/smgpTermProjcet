@@ -12,7 +12,6 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Bullet extends Sprite implements IRecyclable {
     public Enemy targetEnemy;
-    public Cat owner;
     public Bullet(){
         super(R.mipmap.bullet_sheet);
         srcRect = new Rect();
@@ -20,6 +19,10 @@ public class Bullet extends Sprite implements IRecyclable {
     @Override
     public void update(float elapsedSeconds) {
 
+    }
+
+    public void init(Cat owner){
+        
     }
 
     @Override

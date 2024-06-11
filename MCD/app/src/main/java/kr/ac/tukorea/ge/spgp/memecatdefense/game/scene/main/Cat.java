@@ -26,15 +26,15 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     private static final Random random = new Random();
     private static final String TAG = Cat.class.getSimpleName();
     public static int[] upgrade = {0,0,0,0,0};
-    public int slotIdx = 0;
+    public int slotIdx;
     public enum CatType{
         applecat, bananacat, happycat, maxwellcat, oiiacat, COUNT
     }
 
-    public int star = 1;
+    public int star;
     public boolean isDragged = false;
-    private float fireElapsedTime = 0.0f;
-    private float fireCooltime = 1.0f;
+    private float fireElapsedTime;
+    private float fireCooltime;
 
     protected CatType catType = CatType.applecat;
     public Cat(){
@@ -102,13 +102,13 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     private Enemy findTargetEnemy(){
         Enemy target = null;
         ArrayList<IGameObject> Enemies = Scene.top().objectsAt(MainScene.Layer.enemy);
-        float dist = 9999.f;
+        float dist = 0.f;
         // 선두의 Enemy 찾기
         for (IGameObject gameObject: Enemies){
             if(!(gameObject instanceof Enemy)) continue;
             Enemy enemy = (Enemy) gameObject;
             float enemyProgress = enemy.getTotalProgress();
-            if(dist > enemyProgress){
+            if(dist < enemyProgress){
                 dist = enemyProgress;
                 target = enemy;
             }
@@ -132,6 +132,8 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         star = initstar;
         slotIdx = idx;
         catType = type;
+        fireElapsedTime = 0.f;
+        fireCooltime = 1.0f;
         Log.d(TAG, "Cat.init(" + System.identityHashCode(this) + ", " + slotIdx + ", " + type + ", " + initstar);
     }
 

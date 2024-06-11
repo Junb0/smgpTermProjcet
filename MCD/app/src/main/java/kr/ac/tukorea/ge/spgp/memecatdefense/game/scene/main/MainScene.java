@@ -23,7 +23,7 @@ public class MainScene extends Scene {
         initLayers(Layer.COUNT);
 
         add(Layer.bg, new Sprite(R.mipmap.bg_main, 4.5f, 8, 9, 16));
-        for(int i=0; i < 15; i+=2){
+        for(int i=0; i < 0; i+=2){
             Cat cat = Cat.get(i, Cat.CatType.applecat, 1);
             add(Layer.cat, cat);
         }

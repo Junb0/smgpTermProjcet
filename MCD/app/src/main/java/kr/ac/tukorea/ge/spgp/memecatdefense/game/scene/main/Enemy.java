@@ -30,6 +30,7 @@ public class Enemy extends Sprite implements IRecyclable {
     private static final float[] endPoint = {8.46f, 10.5f}; // 끝 지점
     private float totalProgress = 0.0f; // 총 진행한 거리
     protected static Paint hpPaint;
+    private boolean isDead = false;
 
     public Enemy(){
         super(R.mipmap.enemy_square);
@@ -120,6 +121,7 @@ public class Enemy extends Sprite implements IRecyclable {
         dir = Dir.up;
         this.hp = hp;
         this.speed = speed;
+        isDead = false;
     }
 
     private void setSrcRect() {
@@ -137,6 +139,7 @@ public class Enemy extends Sprite implements IRecyclable {
     }
     @Override
     public void onRecycle() {
+        isDead = true;
 
     }
 }

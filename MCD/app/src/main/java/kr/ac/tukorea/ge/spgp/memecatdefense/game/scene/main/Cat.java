@@ -177,6 +177,5 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         return getClass().getSimpleName() + "@" + System.identityHashCode(this) + "(" + width + "x" + height + ")";
     }
 
-
 }
 

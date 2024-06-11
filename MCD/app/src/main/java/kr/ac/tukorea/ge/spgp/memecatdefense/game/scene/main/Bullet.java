@@ -6,24 +6,30 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp.framework.scene.RecycleBin;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
+import kr.ac.tukorea.ge.spgp.framework.util.MathHelper;
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Bullet extends Sprite implements IRecyclable {
     public Enemy targetEnemy;
-    public static final int SIZE = 60;
-    private float[] startPoint = {0.0f, 0.0f};
     private static final String TAG = Cat.class.getSimpleName();
+    public static final int SIZE = 60;
+    public static final float INGAME_SIZE = 0.3f;
+    private float[] startPoint = {0.0f, 0.0f};
+    private float[] pos = {0.0f, 0.0f};
     private int damage = 10;
     private Cat.CatType bulletType;
-    private boolean isDestroy = false;
-    private int animIndex = 0;
-    private float animElapsedSeconds = 0.f;
-    public static final float INGAME_SIZE = 0.5f;
+    private boolean isDestroy;
+    private int animIndex;
+    private float animElapsedSeconds;
+    private float bulletMoveProgress;
+    private float bulletSpeed;
+
     public Bullet(){
         super(R.mipmap.bullet_sheet);
         srcRect = new Rect();
@@ -36,27 +42,56 @@ public class Bullet extends Sprite implements IRecyclable {
         bullet.init(cat, target);
         return bullet;
     }
-    @Override
-    public void update(float elapsedSeconds) {
-        Log.d(TAG, "Bullet.update(" + System.identityHashCode(this) + targetEnemy);
-        if(isDestroy){
-            updateDestroyAnimation(elapsedSeconds);
-        }
-        setSrcRect(bulletType);
-        setDstRect(startPoint[0], startPoint[1]);
-
-    }
-
     public void init(Cat owner, Enemy target){
         bulletType = owner.catType;
         targetEnemy = target;
         setStartpointBySlotIdx(owner.slotIdx);
+        pos = startPoint;
+        isDestroy = false;
+        animIndex = 0;
+        animElapsedSeconds = 0.f;
+        bulletMoveProgress = 0.f;
+        bulletSpeed = 0.3f;
+        setSrcRect(bulletType);
+    }
+    @Override
+    public void update(float elapsedSeconds) {
+        if(targetEnemy.getIsDead()){
+            isDestroy = true;
+        }
+        if(isDestroy){
+            updateDestroyAnimation(elapsedSeconds);
+            return;
+        }
+
+        moveBullet(elapsedSeconds);
+    }
+
+    private void moveBullet(float elapsedSeconds){
+        bulletMoveProgress += elapsedSeconds;
+        float[] targetPos = targetEnemy.getPosition();
+        float[] norm = MathHelper.normalize(targetPos[0]-startPoint[0], targetPos[1]-startPoint[1]);
+        pos[0] = startPoint[0] + norm[0] * bulletMoveProgress * bulletSpeed;
+        pos[1] = startPoint[1] + norm[1] * bulletMoveProgress * bulletSpeed;
+
+        float dist = MathHelper.distance(pos[0], pos[1], targetPos[0], targetPos[1]);
+        if(bulletMoveProgress > 10.f || dist <= 0.5f){
+            targetEnemy.getDamage(damage);
+            isDestroy = true;
+        }
+
+        //float[] targetPos = targetEnemy.getPosition();
+        //pos[0] = (1.0f - bulletMoveProgress) * startPoint[0] + bulletMoveProgress * targetPos[0];
+        //pos[1] = (1.0f - bulletMoveProgress) * startPoint[1] + bulletMoveProgress * targetPos[1];
+        setDstRect(pos[0], pos[1]);
     }
 
     private void updateDestroyAnimation(float elapsedSeconds){
         animElapsedSeconds += elapsedSeconds;
-        if(animElapsedSeconds >= 0.1f){
+        if(animElapsedSeconds >= 0.02f){
             animIndex += 1;
+            setSrcRect(bulletType);
+            animElapsedSeconds = 0.f;
         }
         if(animIndex > 9){
             Scene scene = Scene.top();
@@ -73,6 +108,7 @@ public class Bullet extends Sprite implements IRecyclable {
         int y = slotIdx / 5;
         startPoint[0] = 2.28f + x + x * 0.08f;
         startPoint[1] = 6.92f + y + y * 0.04f;
+
     }
 
     private void setSrcRect(Cat.CatType type) {
@@ -93,7 +129,6 @@ public class Bullet extends Sprite implements IRecyclable {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
     }
     @Override
     public void onRecycle() {

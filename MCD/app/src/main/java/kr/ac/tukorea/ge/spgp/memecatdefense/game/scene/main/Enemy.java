@@ -93,6 +93,16 @@ public class Enemy extends Sprite implements IRecyclable {
         Metrics.concat(canvas);
     }
 
+    public void getDamage(float damage){
+        hp -= damage;
+        if(hp <= 0) {
+            Scene scene = Scene.top();
+            isDead = true;
+            MainScene.gold += 10;
+            scene.remove(MainScene.Layer.enemy, this);
+        }
+    }
+
     public static Enemy get(int hp, float speed){
         Enemy enemy = (Enemy) RecycleBin.get(Enemy.class);
         if (enemy == null){
@@ -103,13 +113,13 @@ public class Enemy extends Sprite implements IRecyclable {
     }
 
     private void EnemyArrive(){
-        MainScene scene = (MainScene)Scene.top();
+        Scene scene = Scene.top();
 
         if (scene == null){
             Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
             return;
         }
-        scene.playerHP -= 10.f;
+        MainScene.playerHP -= 10;
         scene.remove(MainScene.Layer.enemy, this);
     }
 
@@ -118,10 +128,19 @@ public class Enemy extends Sprite implements IRecyclable {
         position[0]=startingPoint[0];
         position[1]=startingPoint[1];
         setDstRect(position[0], position[1]);
+        totalProgress = 0.f;
         dir = Dir.up;
         this.hp = hp;
         this.speed = speed;
         isDead = false;
+    }
+
+    public boolean getIsDead(){
+        return isDead;
+    }
+
+    public float[] getPosition(){
+        return position;
     }
 
     private void setSrcRect() {

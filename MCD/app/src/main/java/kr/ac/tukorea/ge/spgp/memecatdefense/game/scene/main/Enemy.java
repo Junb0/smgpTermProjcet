@@ -11,6 +11,7 @@ import kr.ac.tukorea.ge.spgp.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp.framework.scene.RecycleBin;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
+import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main.DamageIndicator;
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Enemy extends Sprite implements IRecyclable {
@@ -38,6 +39,7 @@ public class Enemy extends Sprite implements IRecyclable {
         hpPaint = new Paint();
         hpPaint.setColor(Color.WHITE);
         hpPaint.setTextSize(40f);
+
         hpPaint.setTextAlign(Paint.Align.CENTER);
     }
 
@@ -94,9 +96,14 @@ public class Enemy extends Sprite implements IRecyclable {
     }
 
     public void getDamage(float damage){
+        Scene scene = Scene.top();
         hp -= damage;
+        DamageIndicator DI = DamageIndicator.get((int)damage, this);
+        scene.add(MainScene.Layer.ui, DI);
+
+
         if(hp <= 0) {
-            Scene scene = Scene.top();
+
             isDead = true;
             MainScene.gold += 10;
             scene.remove(MainScene.Layer.enemy, this);

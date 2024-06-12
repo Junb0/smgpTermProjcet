@@ -17,7 +17,7 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Bullet extends Sprite implements IRecyclable {
     public Enemy targetEnemy;
-    private static final String TAG = Cat.class.getSimpleName();
+    private static final String TAG = Bullet.class.getSimpleName();
     public static final int SIZE = 60;
     public static final float INGAME_SIZE = 0.3f;
     private float[] startPoint = {0.0f, 0.0f};

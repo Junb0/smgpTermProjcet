@@ -59,8 +59,6 @@ public class TextUI implements IGameObject {
 
     @Override
     public void draw(Canvas canvas) {
-
-        Scene scene = Scene.top();
         int gold = MainScene.gold;
         float[] pts = Metrics.toScreen(0.4f, 12.5f);
         canvas.restore();
@@ -82,7 +80,7 @@ public class TextUI implements IGameObject {
             canvas.drawText("" + price, pts[0], pts[1] , upgradePricePaint);
         }
 
-        pts = Metrics.toScreen(7.5f, 0.5f);
+        pts = Metrics.toScreen(7.5f, 12.5f);
         int playerHP = MainScene.playerHP;
         canvas.drawText("HP: " + playerHP, pts[0], pts[1], playerHPPaint);
 

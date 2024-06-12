@@ -35,6 +35,7 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     public boolean isDragged = false;
     private float fireElapsedTime;
     private float fireCooltime;
+    private float criticalPercent;
 
     protected CatType catType = CatType.applecat;
     public Cat(){
@@ -49,7 +50,7 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         }
 
         fireElapsedTime += elapsedSeconds;
-        if(fireElapsedTime >= fireCooltime){
+        if(fireElapsedTime >= getFinalFireCooltime()){
             fire();
         }
 
@@ -88,6 +89,12 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         }
     }
 
+    public float getFinalFireCooltime(){
+        float fireCool = 0.f;
+        fireCool = (float)1 / star;
+        return fireCool;
+    }
+
     public void makeDraggedCatFromThis(){
         DraggedCat draggedCat = DraggedCat.get(slotIdx, catType, star);
         Scene scene = Scene.top();
@@ -100,6 +107,26 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     }
 
     private Enemy findTargetEnemy(){
+        Enemy enemy;
+        switch(catType){
+            case happycat:
+            case maxwellcat:
+                enemy = findTargetFirstEnemy();
+                break;
+            case applecat:
+            case oiiacat:
+                enemy = findTargetRandomEnemy();
+                break;
+            case bananacat:
+                enemy = findTargetHighestHPEnemy();
+                break;
+            default:
+                enemy = findTargetFirstEnemy();
+        }
+        return enemy;
+    }
+
+    private Enemy findTargetFirstEnemy(){
         Enemy target = null;
         ArrayList<IGameObject> Enemies = Scene.top().objectsAt(MainScene.Layer.enemy);
         float dist = 0.f;
@@ -115,6 +142,69 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         }
         return target;
     }
+
+    private Enemy findTargetRandomEnemy(){
+        ArrayList<IGameObject> enemies = Scene.top().objectsAt(MainScene.Layer.enemy);
+        if (enemies.isEmpty()) return null; // 적이 없으면 null 반환
+
+        Random random = new Random();
+        Enemy target;
+        do {
+            int randomIndex = random.nextInt(enemies.size());
+            target = enemies.get(randomIndex) instanceof Enemy ? (Enemy)enemies.get(randomIndex) : null;
+        } while (target == null); // Enemy 타입이 아닌 경우 다시 랜덤 선택
+
+        return target;
+    }
+
+    private Enemy findTargetSecondEnemy(){
+        ArrayList<IGameObject> enemies = Scene.top().objectsAt(MainScene.Layer.enemy);
+        if (enemies.size() == 0) return null; // 적이 없으면 null 반환
+        if (enemies.size() == 1 && enemies.get(0) instanceof Enemy) return (Enemy)enemies.get(0); // 적이 하나만 있으면 그 적 반환
+
+        Enemy largest = null;
+        Enemy secondLargest = null;
+
+        for (IGameObject gameObject : enemies) {
+            if (!(gameObject instanceof Enemy)) continue;
+            Enemy enemy = (Enemy) gameObject;
+
+            if (largest == null || enemy.getTotalProgress() > largest.getTotalProgress()) {
+                secondLargest = largest;
+                largest = enemy;
+            } else if (secondLargest == null || enemy.getTotalProgress() > secondLargest.getTotalProgress()) {
+                secondLargest = enemy;
+            }
+        }
+
+        return secondLargest != null ? secondLargest : largest; // 두 번째로 큰 적이 없는 경우 가장 큰 적 반환
+    }
+
+    private Enemy findTargetHighestHPEnemy(){
+        ArrayList<IGameObject> enemies = Scene.top().objectsAt(MainScene.Layer.enemy);
+        if (enemies.size() == 0) return null; // 적이 없으면 null 반환
+
+        Enemy bestEnemy = null;
+        float maxHp = 0;
+        float maxProgress = 0;
+
+        for (IGameObject gameObject : enemies) {
+            if (!(gameObject instanceof Enemy)) continue;
+            Enemy enemy = (Enemy) gameObject;
+
+            float currentHp = enemy.hp;
+            float currentProgress = enemy.getTotalProgress();
+
+            if (bestEnemy == null || currentHp > maxHp || (currentHp == maxHp && currentProgress > maxProgress)) {
+                bestEnemy = enemy;
+                maxHp = currentHp;
+                maxProgress = currentProgress;
+            }
+        }
+
+        return bestEnemy;
+    }
+
 
     public static Cat get(int slotIdx, CatType type, int initstar){
         Cat cat = (Cat) RecycleBin.get(Cat.class);
@@ -133,7 +223,8 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         slotIdx = idx;
         catType = type;
         fireElapsedTime = 0.f;
-        fireCooltime = 1.0f;
+        fireCooltime = 0.1f;
+        criticalPercent = 0.1f;
         Log.d(TAG, "Cat.init(" + System.identityHashCode(this) + ", " + slotIdx + ", " + type + ", " + initstar);
     }
 
@@ -154,15 +245,51 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         dstRect.set(left, top, left + 1, top + 1);
     }
 
-    public int getFinalDamage(){
+    public boolean simulateCritical(){
+        float finalCritPercent = criticalPercent + (float)UpgradeManager.outgameUpgradeLevels[7] * 0.03f;
+        return random.nextFloat() <= finalCritPercent;
+    }
 
-        return 0;
+    public int getFinalDamage(){
+        float finalDamage;
+        float baseDamage;
+        float upgradeScale = 1.0f + 0.1f * (float)UpgradeManager.upgradeLevels[catType.ordinal()];
+        float outgameUpgradeScale = 1.0f + 0.1f * (float)UpgradeManager.outgameUpgradeLevels[catType.ordinal()];
+        float ougameFinalDamageScale = 1.0f + 0.02f * (float)UpgradeManager.outgameUpgradeLevels[5];
+        switch(catType){
+            case applecat:
+                baseDamage = 15f;
+                finalDamage = ( baseDamage * upgradeScale * outgameUpgradeScale * ougameFinalDamageScale);
+                break;
+            case bananacat:
+                baseDamage = 12f;
+                finalDamage = ( baseDamage * upgradeScale * outgameUpgradeScale * ougameFinalDamageScale);
+                break;
+            case happycat:
+                baseDamage = 14f;
+                finalDamage = ( (baseDamage + (baseDamage * 0.2f * star)) * upgradeScale * outgameUpgradeScale * ougameFinalDamageScale);
+                break;
+            case maxwellcat:
+                baseDamage = 12f;
+                finalDamage = ( baseDamage * upgradeScale * outgameUpgradeScale * ougameFinalDamageScale);
+                break;
+            case oiiacat:
+                baseDamage = 8f;
+                finalDamage = ( baseDamage * upgradeScale * outgameUpgradeScale * ougameFinalDamageScale);
+                break;
+            default:
+                finalDamage = 1.0f;
+        }
+
+        finalDamage = finalDamage * (1.0f + (random.nextFloat() * 0.2f) - 0.1f);
+
+        return (int)finalDamage;
     }
 
     public void fire(){
         Enemy target = findTargetEnemy();
         if(target != null) {
-            Bullet bullet = Bullet.get(this, target);
+            Bullet bullet = Bullet.get(this, target, simulateCritical());
             Scene.top().add(MainScene.Layer.bullet, bullet);
             fireElapsedTime = 0.f;
         }

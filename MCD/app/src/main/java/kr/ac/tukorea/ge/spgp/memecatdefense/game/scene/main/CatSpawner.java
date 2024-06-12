@@ -23,7 +23,7 @@ import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
 import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main.Cat;
 public class CatSpawner implements IGameObject{
-    public static int price = 20;
+    public static int price = 10;
     private final Random random = new Random();
     private final MainScene scene;
     public CatSpawner(MainScene scene) {this.scene = scene;}

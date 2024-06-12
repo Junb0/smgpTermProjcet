@@ -25,6 +25,7 @@ public class DamageIndicator implements IRecyclable, IGameObject {
     private int alpha;
     private static final float lifeTime = 1.0f;
     private boolean ownerIsDead;
+    private boolean isCrit;
 
     public DamageIndicator(){
         damagePaint = new Paint();
@@ -32,24 +33,25 @@ public class DamageIndicator implements IRecyclable, IGameObject {
 
     }
 
-    public static DamageIndicator get(int damage, Enemy owner){
+    public static DamageIndicator get(int damage, Enemy owner, boolean isCrit){
         DamageIndicator DI = (DamageIndicator) RecycleBin.get(DamageIndicator.class);
         if(DI == null){
             DI = new DamageIndicator();
         }
-        DI.init(damage, owner);
+        DI.init(damage, owner, isCrit);
         return DI;
     }
 
-    private void init(int damage, Enemy owner){
+    private void init(int damage, Enemy owner, boolean isCrit){
         this.damage = damage;
         this.owner = owner;
         position[0] = owner.getPosition()[0];
         position[1] = owner.getPosition()[1];
-        position[1] -= 0.5f;
+        position[1] -= 0.3f;
         DIElapsedSeconds = 0.f;
         alpha = 255;
         ownerIsDead = false;
+        this.isCrit = isCrit;
     }
 
     @Override
@@ -86,14 +88,29 @@ public class DamageIndicator implements IRecyclable, IGameObject {
         canvas.restore();
         damagePaint.setTextAlign(Paint.Align.CENTER);
         damagePaint.setStyle(Paint.Style.STROKE);
-        damagePaint.setStrokeWidth(8);
         damagePaint.setColor(Color.BLACK);
         damagePaint.setAlpha(alpha);
-        damagePaint.setTextSize(45f);
+
+        if(isCrit){
+            damagePaint.setStrokeWidth(10);
+            damagePaint.setTextSize(60f);
+        }
+        else{
+            damagePaint.setStrokeWidth(8);
+            damagePaint.setTextSize(45f);
+        }
 
         canvas.drawText(""+damage, pts[0], pts[1], damagePaint);
-        damagePaint.setStyle(Paint.Style.FILL);
-        damagePaint.setColor(Color.WHITE);
+
+        if(isCrit){
+            damagePaint.setStyle(Paint.Style.FILL);
+            damagePaint.setColor(Color.RED);
+        }
+        else{
+            damagePaint.setStyle(Paint.Style.FILL);
+            damagePaint.setColor(Color.YELLOW);
+        }
+
         canvas.drawText(""+damage, pts[0], pts[1], damagePaint);
 
         canvas.save();

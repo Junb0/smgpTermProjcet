@@ -9,6 +9,7 @@ import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
 
 public class UpgradeManager implements IGameObject{
     public static int[] upgradeLevels = {0, 0, 0, 0, 0};
+    public static int[] outgameUpgradeLevels = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     public UpgradeManager() {}
 
     public boolean upgradeCat(boolean purchase, int idx){

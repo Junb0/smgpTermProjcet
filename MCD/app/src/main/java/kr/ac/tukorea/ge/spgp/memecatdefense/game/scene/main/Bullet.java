@@ -29,20 +29,21 @@ public class Bullet extends Sprite implements IRecyclable {
     private float animElapsedSeconds;
     private float bulletMoveProgress;
     private float bulletSpeed;
+    private boolean isCrit;
 
     public Bullet(){
         super(R.mipmap.bullet_sheet);
         srcRect = new Rect();
     }
-    public static Bullet get(Cat cat, Enemy target){
+    public static Bullet get(Cat cat, Enemy target, boolean isCrit){
         Bullet bullet = (Bullet) RecycleBin.get(Bullet.class);
         if(bullet == null){
             bullet = new Bullet();
         }
-        bullet.init(cat, target);
+        bullet.init(cat, target, isCrit);
         return bullet;
     }
-    public void init(Cat owner, Enemy target){
+    public void init(Cat owner, Enemy target, boolean isCrit){
         bulletType = owner.catType;
         targetEnemy = target;
         setStartpointBySlotIdx(owner.slotIdx);
@@ -51,7 +52,12 @@ public class Bullet extends Sprite implements IRecyclable {
         animIndex = 0;
         animElapsedSeconds = 0.f;
         bulletMoveProgress = 0.f;
-        bulletSpeed = 0.3f;
+        bulletSpeed = 1f;
+        this.isCrit = isCrit;
+        damage = owner.getFinalDamage();
+        if(isCrit){
+            damage += (int)(damage * 0.5f);
+        }
         setSrcRect(bulletType);
     }
     @Override
@@ -76,7 +82,7 @@ public class Bullet extends Sprite implements IRecyclable {
 
         float dist = MathHelper.distance(pos[0], pos[1], targetPos[0], targetPos[1]);
         if(bulletMoveProgress > 10.f || dist <= 0.5f){
-            targetEnemy.getDamage(damage);
+            targetEnemy.getDamage(damage, isCrit);
             isDestroy = true;
         }
 

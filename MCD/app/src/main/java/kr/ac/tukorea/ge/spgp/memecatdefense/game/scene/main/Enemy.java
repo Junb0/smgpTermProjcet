@@ -32,6 +32,7 @@ public class Enemy extends Sprite implements IRecyclable {
     private float totalProgress = 0.0f; // 총 진행한 거리
     protected static Paint hpPaint;
     private boolean isDead = false;
+    private float dropGold;
 
     public Enemy(){
         super(R.mipmap.enemy_square);
@@ -95,17 +96,18 @@ public class Enemy extends Sprite implements IRecyclable {
         Metrics.concat(canvas);
     }
 
-    public void getDamage(float damage){
+    public void getDamage(float damage, boolean isCrit){
+        if(isDead){
+            return;
+        }
         Scene scene = Scene.top();
         hp -= damage;
-        DamageIndicator DI = DamageIndicator.get((int)damage, this);
+        DamageIndicator DI = DamageIndicator.get((int)damage, this, isCrit);
         scene.add(MainScene.Layer.ui, DI);
 
-
         if(hp <= 0) {
-
             isDead = true;
-            MainScene.gold += 10;
+            MainScene.gold += (int)(dropGold + dropGold * 0.1f * (float)UpgradeManager.outgameUpgradeLevels[6]);
             scene.remove(MainScene.Layer.enemy, this);
         }
     }
@@ -140,6 +142,7 @@ public class Enemy extends Sprite implements IRecyclable {
         this.hp = hp;
         this.speed = speed;
         isDead = false;
+        dropGold = 10f;
     }
 
     public boolean getIsDead(){

@@ -1,5 +1,9 @@
 package kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main;
 
+import android.content.Intent;
+import android.os.Bundle;
+
+import kr.ac.tukorea.ge.spgp.framework.activity.GameActivity;
 import kr.ac.tukorea.ge.spgp.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 import kr.ac.tukorea.ge.spgp.framework.objects.Button;
@@ -14,12 +18,22 @@ public class MainScene extends Scene {
 
     private final CatSpawner catSpawner;
     private final UpgradeManager upgradeManager;
-    private final EnemySpawner enemySpawner;
+    private final WaveManager waveManager;
     public static int gold = 100;
     public static int playerHP = 100;
 
 
     public MainScene() {
+        Intent intent = GameActivity.activity.getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras != null){
+            for(int i = 0; i < 9; i++){
+                UpgradeManager.outgameUpgradeLevels[i] = extras.getIntArray("upgrade")[i];
+            }
+        }
+
+        playerHP = 100 + UpgradeManager.outgameUpgradeLevels[8] * 20;
+
         initLayers(Layer.COUNT);
 
         add(Layer.bg, new Sprite(R.mipmap.bg_main, 4.5f, 8, 9, 16));
@@ -33,8 +47,8 @@ public class MainScene extends Scene {
         upgradeManager = new UpgradeManager();
         add(Layer.controller, upgradeManager);
 
-        enemySpawner = new EnemySpawner(this);
-        add(Layer.controller, enemySpawner);
+        waveManager = new WaveManager();
+        add(Layer.controller, waveManager);
 
         add(Layer.ui, new TextUI());
 

@@ -1,20 +1,548 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".app.MainActivity">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:text="Meme Cat Defense"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="최고 웨이브 기록: "
+            android:textSize="20sp"
+            android:textStyle="bold"
+
+            />
+
+        <TextView
+            android:id="@+id/highscore"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="1250"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+
+            android:textAlignment="center"
+            android:textSize="8sp"
+            android:text="reset"
+            android:onClick="onBtnRest"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+
+            />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+
+            app:srcCompat="@mipmap/newdia" />
+
+        <TextView
+            android:id="@+id/diatextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:text="1250"
+            android:textAlignment="viewEnd"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/applecat_removebg" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AppleCat"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/appleCatUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/appleCatUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="데미지 + 0%" />
+
+            <Button
+                android:id="@+id/appleCatUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeAppleCat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/bananacat_removebg" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BananaCat"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/bananaCatUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/bananaCatUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="데미지 + 0%" />
+
+            <Button
+                android:id="@+id/bananaCatUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeBananaCat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/happycat_removebg" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HappyCat"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/happyCatUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/happyCatUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="데미지 + 0%" />
+
+            <Button
+                android:id="@+id/happyCatUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeHappyCat"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/maxwellcat" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MaxwellCat"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/maxwellCatUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/maxwellCatUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="데미지 + 0%" />
+
+
+
+            <Button
+                android:id="@+id/maxwellCatUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeMaxwellCat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/oiiacat_removebg" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="OiiaCat"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/oiiaCatUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/oiiaCatUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="데미지 + 0%" />
+
+            <Button
+                android:id="@+id/oiiaCatUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeOiiaCat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="모든 고양이 \n최종 데미지"
+                android:lines="3"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/finalDamageUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/finalDamageUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="+ 0%" />
+
+            <Button
+                android:id="@+id/finalDamageUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeFinalDamage"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="골드 획득량 증가"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/goldGainUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/goldGainUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="+ 0%" />
+
+
+
+            <Button
+                android:id="@+id/goldGainUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeGoldGain"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="크리티컬 확률"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/criticalPercentUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/criticalPercentUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="+ 0%" />
+
+            <Button
+                android:id="@+id/criticalPercentUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradeCriticalPercent"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/title_round_bg"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="플레이어 HP 증가"
+                android:lines="1"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/playerHPUpgradeCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LV 0"
+                android:lines="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/playerHPUpgradeEffectTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="1"
+                android:text="+ 0" />
+
+            <Button
+                android:id="@+id/playerHPUpgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:onClick="onBtnUpgradePlayerHP"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Meme Cat Defense"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center_horizontal"
+        android:enabled="true"
+        android:onClick="onBtnStartGame"
+        android:text="StartGame" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

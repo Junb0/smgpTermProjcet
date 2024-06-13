@@ -8,9 +8,9 @@ import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
 
 public class WaveManager implements IGameObject{
     private final EnemySpawner enemySpawner;
-    private int recentWave;
-    private float waveRemainSeconds;
-    private float maxWaveSeconds;
+    protected int recentWave;
+    protected float waveRemainSeconds;
+    protected float maxWaveSeconds;
     private float waveWaitRemainSeconds;
     private float maxWaveWaitSeconds;
     private boolean isWait;
@@ -23,7 +23,7 @@ public class WaveManager implements IGameObject{
         recentWave = 1;
         maxWaveSeconds = 30.9f;
         waveRemainSeconds = maxWaveSeconds;
-        maxWaveWaitSeconds = 10.9f;
+        maxWaveWaitSeconds = 5.9f;
         waveWaitRemainSeconds = maxWaveWaitSeconds;
         isWait = true;
 

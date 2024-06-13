@@ -31,6 +31,7 @@ public class Enemy extends Sprite implements IRecyclable {
     private static final float[] endPoint = {8.46f, 10.5f}; // 끝 지점
     private float totalProgress = 0.0f; // 총 진행한 거리
     protected static Paint hpPaint;
+    protected static Paint hpStrokePaint;
     private boolean isDead = false;
     private float dropGold;
 
@@ -39,9 +40,15 @@ public class Enemy extends Sprite implements IRecyclable {
         srcRect = new Rect();
         hpPaint = new Paint();
         hpPaint.setColor(Color.WHITE);
-        hpPaint.setTextSize(40f);
-
+        hpPaint.setTextSize(37f);
         hpPaint.setTextAlign(Paint.Align.CENTER);
+        hpStrokePaint = new Paint();
+        hpStrokePaint.setStyle(Paint.Style.STROKE);
+        hpStrokePaint.setStrokeWidth(8f);
+        hpStrokePaint.setColor(Color.BLACK);
+        hpStrokePaint.setTextSize(37f);
+        hpStrokePaint.setTextAlign(Paint.Align.CENTER);
+
     }
 
     @Override
@@ -90,10 +97,31 @@ public class Enemy extends Sprite implements IRecyclable {
         float[] pts = Metrics.toScreen(position[0], position[1] + 0.1f);
         canvas.restore();
 
-        canvas.drawText("" + hp, pts[0], pts[1] , hpPaint);
+        canvas.drawText(getHPText(hp), pts[0], pts[1] , hpStrokePaint);
+        canvas.drawText(getHPText(hp), pts[0], pts[1] , hpPaint);
 
         canvas.save();
         Metrics.concat(canvas);
+    }
+
+    public String getHPText(int hp){
+        String str;
+        if(hp > 1000000){
+            str = hp/1000000 +"M";
+            if(hp < 10000000){
+                str = hp/1000000 + "." + hp%1000000 / 100000+"M";
+            }
+            return str;
+        }
+        if(hp > 1000){
+            str = hp/1000 + "K";
+            if(hp < 10000){
+                str = hp/1000 + "." + hp%1000 / 100+"M";
+            }
+            return str;
+        }
+        str = Integer.toString(hp);
+        return str;
     }
 
     public void getDamage(float damage, boolean isCrit){

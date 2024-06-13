@@ -21,12 +21,20 @@ public class EnemySpawner implements IGameObject{
         if(spawnElapsedSeconds >= spawnCooltime) {
             Scene scene = Scene.top();
             spawnElapsedSeconds = 0.f;
-            Enemy enemy = Enemy.get(500, 0.5f);
+            Enemy enemy = Enemy.get(999999, 0.5f);
             scene.add(MainScene.Layer.enemy, enemy);
         }
     }
     @Override
     public void draw(Canvas canvas) {
 
+    }
+    public void newWave(){
+
+    }
+    private int getEnemyHP(){
+        int hp;
+        hp = 100 + waveManager.recentWave * 10;
+        return hp;
     }
 }

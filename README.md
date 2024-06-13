@@ -102,12 +102,14 @@
    | 9주차 | 디버깅 및 밸런스 수정, 발표 자료 제작                   | 90%                                       |
 
 #### 추가구현 : 데미지 표시 기능, 메인 액티비티에서 아웃게임 업그레이드 기능
+![아웃게임업그레이드](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/%EC%95%84%EC%9B%83%EA%B2%8C%EC%9E%84%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C.png)
+![데미지표시](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/%EA%B2%8C%EC%9E%84%ED%94%8C%EB%A0%88%EC%9D%B4.gif)
 
 #### 핵심 시스템 구현 예시 (소환/합성)
 ![소환합성](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/spawnAndMerge.gif)
 
 #### 주차별 커밋 내역
-![커밋횟수](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/%EC%BB%A4%EB%B0%8B%ED%9A%9F%EC%88%98.png)
+![커밋횟수](https://github.com/Junb0/smgpTermProjcet/blob/main/docs/%EC%B5%9C%EC%A2%85%20%EC%BB%A4%EB%B0%8B%20%ED%9A%9F%EC%88%98.png)
 | 주차  | 횟수 |
 | :---: | :--: |
 | 0주차 |  3   |

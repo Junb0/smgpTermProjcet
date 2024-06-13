@@ -26,7 +26,10 @@ public class CatSpawner implements IGameObject{
     public static int price = 10;
     private final Random random = new Random();
     private final MainScene scene;
-    public CatSpawner(MainScene scene) {this.scene = scene;}
+    public CatSpawner(MainScene scene) {
+        this.scene = scene;
+        price = 10;
+    }
 
     public boolean purchaseCat(boolean purchase){
         if(!purchase){

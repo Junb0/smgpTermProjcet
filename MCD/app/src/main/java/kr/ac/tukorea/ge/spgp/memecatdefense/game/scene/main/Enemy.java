@@ -1,18 +1,28 @@
 package kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import kr.ac.tukorea.ge.spgp.framework.activity.GameActivity;
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp.framework.scene.RecycleBin;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
+import kr.ac.tukorea.ge.spgp.memecatdefense.app.MainActivity;
+import kr.ac.tukorea.ge.spgp.memecatdefense.app.MemeCatDefenseActivity;
 import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.main.DamageIndicator;
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
+import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.paused.GameOverScene;
+import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.paused.PausedScene;
 
 public class Enemy extends Sprite implements IRecyclable {
     private static final String TAG = Enemy.class.getSimpleName();
@@ -34,9 +44,12 @@ public class Enemy extends Sprite implements IRecyclable {
     protected static Paint hpStrokePaint;
     private boolean isDead = false;
     private float dropGold;
+    private float dropDia;
+    private int enemyType;
+    private int hpOrigin;
 
     public Enemy(){
-        super(R.mipmap.enemy_square);
+        super(R.mipmap.enemy_square2);
         srcRect = new Rect();
         hpPaint = new Paint();
         hpPaint.setColor(Color.WHITE);
@@ -116,7 +129,7 @@ public class Enemy extends Sprite implements IRecyclable {
         if(hp > 1000){
             str = hp/1000 + "K";
             if(hp < 10000){
-                str = hp/1000 + "." + hp%1000 / 100+"M";
+                str = hp/1000 + "." + hp%1000 / 100+"K";
             }
             return str;
         }
@@ -134,18 +147,28 @@ public class Enemy extends Sprite implements IRecyclable {
         scene.add(MainScene.Layer.ui, DI);
 
         if(hp <= 0) {
+            int gol = (int)(dropGold * (enemyType + 1));
+            MainScene.gold += (int)(gol + gol * 0.1f * (float)UpgradeManager.outgameUpgradeLevels[6]);
+            MainScene.dia += (int)(dropDia);
+            if(enemyType >= 1){
+                enemyType -= 1;
+                hp = hpOrigin / 2;
+                hpOrigin = hp;
+                setSrcRect();
+                return;
+            }
             isDead = true;
-            MainScene.gold += (int)(dropGold + dropGold * 0.1f * (float)UpgradeManager.outgameUpgradeLevels[6]);
+
             scene.remove(MainScene.Layer.enemy, this);
         }
     }
 
-    public static Enemy get(int hp, float speed){
+    public static Enemy get(int hp, float speed, int type){
         Enemy enemy = (Enemy) RecycleBin.get(Enemy.class);
         if (enemy == null){
             enemy = new Enemy();
         }
-        enemy.init(hp, speed);
+        enemy.init(hp, speed, type);
         return enemy;
     }
 
@@ -157,20 +180,27 @@ public class Enemy extends Sprite implements IRecyclable {
             return;
         }
         MainScene.playerHP -= 10;
+
+        if(MainScene.playerHP <= 0){
+            new GameOverScene().push();
+        }
         scene.remove(MainScene.Layer.enemy, this);
     }
 
-    private void init(int hp, float speed){
-        setSrcRect();
+    private void init(int hp, float speed, int type){
         position[0]=startingPoint[0];
         position[1]=startingPoint[1];
         setDstRect(position[0], position[1]);
         totalProgress = 0.f;
         dir = Dir.up;
+        hpOrigin = hp;
         this.hp = hp;
         this.speed = speed;
         isDead = false;
-        dropGold = 10f;
+        dropGold = 15f;
+        dropDia = 10f;
+        enemyType = type;
+        setSrcRect();
     }
 
     public boolean getIsDead(){
@@ -182,7 +212,7 @@ public class Enemy extends Sprite implements IRecyclable {
     }
 
     private void setSrcRect() {
-        int x = 0;
+        int x = enemyType;
         int y = 0;
         int left = x * SIZE;
         int top = y * SIZE;
@@ -199,4 +229,5 @@ public class Enemy extends Sprite implements IRecyclable {
         isDead = true;
 
     }
+
 }

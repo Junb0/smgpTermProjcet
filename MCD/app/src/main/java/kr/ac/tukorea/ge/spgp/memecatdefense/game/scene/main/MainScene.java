@@ -9,6 +9,7 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 import kr.ac.tukorea.ge.spgp.framework.objects.Button;
 import kr.ac.tukorea.ge.spgp.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.paused.PausedScene;
 
 public class MainScene extends Scene {
     private static final String TAG = MainScene.class.getSimpleName();
@@ -21,18 +22,26 @@ public class MainScene extends Scene {
     private final WaveManager waveManager;
     public static int gold = 100;
     public static int playerHP = 100;
+    public static int dia = -1;
+    public static int highscore = -1;
+    public static int highscoreOrigin = -1;
 
 
     public MainScene() {
+        dia = 0;
+        highscore = 0;
         Intent intent = GameActivity.activity.getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null){
             for(int i = 0; i < 9; i++){
                 UpgradeManager.outgameUpgradeLevels[i] = extras.getIntArray("upgrade")[i];
             }
+            dia = 0;
+            highscoreOrigin = extras.getInt("highscore", 0);
         }
 
         playerHP = 100 + UpgradeManager.outgameUpgradeLevels[8] * 20;
+        gold = 100;
 
         initLayers(Layer.COUNT);
 
@@ -56,42 +65,50 @@ public class MainScene extends Scene {
         add(Layer.touch, new Button(R.mipmap.btn_spawn, 4.5f, 12.5f, 3.0f, 3.0f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 catSpawner.purchaseCat(action == Button.Action.pressed);
-                return true;
+                return false;
             }
         }));
 
         add(Layer.touch, new Button(R.mipmap.applecat_removebg, 1f, 15.f, 1.5f, 1.5f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 upgradeManager.upgradeCat(action == Button.Action.pressed, 0);
-                return true;
+                return false;
             }
         }));
 
         add(Layer.touch, new Button(R.mipmap.bananacat_removebg, 2.75f, 15.f, 1.5f, 1.5f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 upgradeManager.upgradeCat(action == Button.Action.pressed, 1);
-                return true;
+                return false;
             }
         }));
 
         add(Layer.touch, new Button(R.mipmap.happycat_removebg, 4.5f, 15.f, 1.5f, 1.5f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 upgradeManager.upgradeCat(action == Button.Action.pressed, 2);
-                return true;
+                return false;
             }
         }));
 
         add(Layer.touch, new Button(R.mipmap.maxwellcat_removebg, 6.25f, 15.f, 1.5f, 1.5f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 upgradeManager.upgradeCat(action == Button.Action.pressed, 3);
-                return true;
+                return false;
             }
         }));
 
         add(Layer.touch, new Button(R.mipmap.oiiacat_removebg, 8f, 15.f, 1.5f, 1.5f, new Button.Callback(){
             public boolean onTouch(Button.Action action){
                 upgradeManager.upgradeCat(action == Button.Action.pressed, 4);
-                return true;
+                return false;
+            }
+        }));
+
+        add(Layer.touch, new Button(R.mipmap.btn_pause, 8.0f, 1.0f, 1.0f, 1.0f, new Button.Callback() {
+            @Override
+            public boolean onTouch(Button.Action action) {
+                new PausedScene().push();
+                return false;
             }
         }));
 
@@ -115,6 +132,12 @@ public class MainScene extends Scene {
     @Override
     protected void onEnd() {
         Sound.stopMusic();
+    }
+
+    @Override
+    public boolean onBackPressed(){
+        new PausedScene().push();
+        return true;
     }
 
     @Override

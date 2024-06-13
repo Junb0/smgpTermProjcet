@@ -21,7 +21,7 @@ public class WaveManager implements IGameObject{
         enemySpawner = new EnemySpawner(this);
 
         recentWave = 1;
-        maxWaveSeconds = 30.9f;
+        maxWaveSeconds = 20.9f;
         waveRemainSeconds = maxWaveSeconds;
         maxWaveWaitSeconds = 5.9f;
         waveWaitRemainSeconds = maxWaveWaitSeconds;
@@ -58,7 +58,12 @@ public class WaveManager implements IGameObject{
         waveRemainSeconds -= elapsedSeconds;
         if(waveRemainSeconds <= 0){
             recentWave += 1;
+            if(MainScene.highscore < recentWave){
+                MainScene.highscore = recentWave;
+            }
             waveWaitRemainSeconds = maxWaveWaitSeconds;
+            MainScene.dia += 100 + (int)Math.pow(10, recentWave * 0.1);
+
             isWait = true;
         }
     }

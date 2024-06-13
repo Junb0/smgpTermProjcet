@@ -126,10 +126,18 @@ public class Scene {
 
     protected static Paint bboxPaint;
     public void draw(Canvas canvas) {
-        if (this.clipsRect()) {
+        draw(canvas, stack.size() - 1);
+    }
+    protected static void draw(Canvas canvas, int index) {
+        Scene scene = stack.get(index);
+        if (scene.isTransparent() && index > 0) {
+            draw(canvas, index - 1);
+        }
+
+        if (scene.clipsRect()) {
             canvas.clipRect(0, 0, Metrics.width, Metrics.height);
         }
-        for (ArrayList<IGameObject> objects: layers) {
+        for (ArrayList<IGameObject> objects: scene.layers) {
             for (IGameObject gobj : objects) {
                 gobj.draw(canvas);
             }
@@ -140,7 +148,7 @@ public class Scene {
                 bboxPaint.setStyle(Paint.Style.STROKE);
                 bboxPaint.setColor(Color.RED);
             }
-            for (ArrayList<IGameObject> objects: layers) {
+            for (ArrayList<IGameObject> objects: scene.layers) {
                 for (IGameObject gobj : objects) {
                     if (gobj instanceof IBoxCollidable) {
                         RectF rect = ((IBoxCollidable) gobj).getCollisionRect();
@@ -201,6 +209,10 @@ public class Scene {
 
     public boolean clipsRect() {
         return true;
+    }
+
+    public boolean isTransparent() {
+        return false;
     }
 
     //////////////////////////////////////////////////

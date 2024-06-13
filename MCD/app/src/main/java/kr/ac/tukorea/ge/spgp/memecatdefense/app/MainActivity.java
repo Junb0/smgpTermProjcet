@@ -6,16 +6,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import kr.ac.tukorea.ge.spgp.framework.activity.GameActivity;
 import kr.ac.tukorea.ge.spgp.memecatdefense.BuildConfig;
 import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IGameObject;
@@ -23,11 +31,31 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.databinding.ActivityMainBinding;
 
 
 public class MainActivity extends AppCompatActivity {
+
+
     private ActivityMainBinding binding;
     private Toast toast = null;
     private int[] UpgradeLevels = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    private int dia = 1000;
+    private int dia = 10000;
     private int highscore = 0;
+
+    ActivityResultLauncher<Intent> startActivityResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                            int tmpDia = result.getData().getIntExtra("dia", -1);
+                            int tmpHighscore = result.getData().getIntExtra("highscore", -1);
+                            Log.d("MainActivity", "Received dia = " + tmpDia);  // 로그 출력으로 받은 dia 값 확인
+                            if (tmpDia >= 0) {
+                                dia += tmpDia;
+                            }
+                            if(highscore < tmpHighscore){
+                                highscore = tmpHighscore;
+                            }
+                            saveUpgradeState();
+                            applyUpgradeInfoToViews();
+                        }
+                    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +70,21 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
+
     private void runGameActivity(){
         Intent intent = new Intent(this, MemeCatDefenseActivity.class);
         intent.putExtra("upgrade", UpgradeLevels);
-        startActivity(intent);
+        intent.putExtra("highscore", highscore);
+        startActivityResult.launch(intent);
     }
-    
+
+
     private void makeToast(String msg){
         if(toast != null){
             toast.cancel();
@@ -276,10 +313,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnUpgradeCriticalPercent(View view) {
+        if(UpgradeLevels[7] > 30){
+            makeToast("최대 레벨입니다.");
+            return;
+        }
         if(dia < 100 + UpgradeLevels[7] * 50){
             makeToast("다이아가 부족합니다.");
             return;
         }
+
         dia -= 100 + UpgradeLevels[3] * 50;
         UpgradeLevels[7] += 1;
         applyUpgradeInfoToViews();
@@ -307,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("초기화", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dia = 1000;
+                        dia = 10000;
                         highscore = 0;
                         for(int i = 0; i < 9; i++){
                             UpgradeLevels[i] = 0;
@@ -332,4 +374,5 @@ public class MainActivity extends AppCompatActivity {
         editor.clear();
         editor.commit();
     }
+
 }

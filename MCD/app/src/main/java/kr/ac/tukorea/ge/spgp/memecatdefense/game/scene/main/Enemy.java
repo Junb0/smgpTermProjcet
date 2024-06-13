@@ -187,7 +187,7 @@ public class Enemy extends Sprite implements IRecyclable {
         MainScene.playerHP -= 10;
 
         if(MainScene.playerHP <= 0){
-            new GameOverScene().push();
+            MainScene.isGameOver = true;
         }
         scene.remove(MainScene.Layer.enemy, this);
     }

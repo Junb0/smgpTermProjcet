@@ -9,6 +9,7 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 import kr.ac.tukorea.ge.spgp.framework.objects.Button;
 import kr.ac.tukorea.ge.spgp.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.paused.GameOverScene;
 import kr.ac.tukorea.ge.spgp.memecatdefense.game.scene.paused.PausedScene;
 
 public class MainScene extends Scene {
@@ -25,11 +26,13 @@ public class MainScene extends Scene {
     public static int dia = -1;
     public static int highscore = -1;
     public static int highscoreOrigin = -1;
+    public static boolean isGameOver = false;
 
 
     public MainScene() {
         dia = 0;
         highscore = 0;
+        isGameOver = false;
         Intent intent = GameActivity.activity.getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null){
@@ -113,6 +116,16 @@ public class MainScene extends Scene {
         }));
 
 
+    }
+
+    @Override
+    public void update(float elapsedSeconds) {
+        if(!isGameOver) {
+            super.update(elapsedSeconds);
+        }
+        if(isGameOver){
+            new GameOverScene().push();
+        }
     }
 
     @Override

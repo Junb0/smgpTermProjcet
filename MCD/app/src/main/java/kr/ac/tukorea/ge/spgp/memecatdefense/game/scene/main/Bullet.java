@@ -7,8 +7,11 @@ import android.graphics.Rect;
 import android.util.Log;
 
 
+import java.util.Random;
+
 import kr.ac.tukorea.ge.spgp.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp.framework.scene.RecycleBin;
 import kr.ac.tukorea.ge.spgp.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
@@ -17,6 +20,7 @@ import kr.ac.tukorea.ge.spgp.memecatdefense.R;
 
 public class Bullet extends Sprite implements IRecyclable {
     public Enemy targetEnemy;
+    private static final Random random = new Random();
     private static final String TAG = Bullet.class.getSimpleName();
     public static final int SIZE = 60;
     public static final float INGAME_SIZE = 0.3f;
@@ -56,6 +60,9 @@ public class Bullet extends Sprite implements IRecyclable {
         this.isCrit = isCrit;
         damage = owner.getFinalDamage();
         if(isCrit){
+            if(owner.catType == Cat.CatType.applecat){
+                damage += (int)(damage * (0.5f + 0.3f + owner.star * 0.1f));
+            }
             damage += (int)(damage * 0.5f);
         }
         setSrcRect(bulletType);
@@ -83,6 +90,26 @@ public class Bullet extends Sprite implements IRecyclable {
         float dist = MathHelper.distance(pos[0], pos[1], targetPos[0], targetPos[1]);
         if(bulletMoveProgress > 10.f || dist <= 0.5f){
             targetEnemy.getDamage(damage, isCrit);
+            if(bulletType == Cat.CatType.oiiacat){
+                if(random.nextFloat() <= 0.05f) {
+                    targetEnemy.stunSeconds = 3.0f;
+                }
+            }
+
+            switch(random.nextInt(3)){
+                case 0:
+                    Sound.playEffect(R.raw.hit1);
+                    break;
+                case 1:
+                    Sound.playEffect(R.raw.hit2);
+                    break;
+                case 2:
+                    Sound.playEffect(R.raw.hit3);
+                    break;
+
+                default:
+                    Sound.playEffect(R.raw.hit1);
+            }
             isDestroy = true;
         }
 

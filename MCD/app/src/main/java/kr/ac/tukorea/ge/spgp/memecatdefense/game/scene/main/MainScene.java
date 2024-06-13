@@ -117,6 +117,7 @@ public class MainScene extends Scene {
 
     @Override
     protected void onStart() {
+        Sound.playMusic(R.raw.newmain);
     }
 
     @Override

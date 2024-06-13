@@ -9,7 +9,7 @@ import kr.ac.tukorea.ge.spgp.framework.view.Metrics;
 public class WaveManager implements IGameObject{
     private final EnemySpawner enemySpawner;
     protected int recentWave;
-    protected float waveRemainSeconds;
+    public static float waveRemainSeconds;
     protected float maxWaveSeconds;
     private float waveWaitRemainSeconds;
     private float maxWaveWaitSeconds;

@@ -47,6 +47,7 @@ public class Enemy extends Sprite implements IRecyclable {
     private float dropDia;
     private int enemyType;
     private int hpOrigin;
+    public float stunSeconds;
 
     public Enemy(){
         super(R.mipmap.enemy_square2);
@@ -66,6 +67,10 @@ public class Enemy extends Sprite implements IRecyclable {
 
     @Override
     public void update(float elapsedSeconds) {
+        if(stunSeconds > 0f){
+            stunSeconds -= elapsedSeconds;
+            return;
+        }
         switch (dir){
             case up:
                 float dy = speed * elapsedSeconds;
@@ -200,6 +205,7 @@ public class Enemy extends Sprite implements IRecyclable {
         dropGold = 15f;
         dropDia = 10f;
         enemyType = type;
+        stunSeconds = 0.f;
         setSrcRect();
     }
 

@@ -26,6 +26,7 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     private static final Random random = new Random();
     private static final String TAG = Cat.class.getSimpleName();
     public static int[] upgrade = {0,0,0,0,0};
+    public static int numOfMaxwellCat = 0;
     public int slotIdx;
     public enum CatType{
         applecat, bananacat, happycat, maxwellcat, oiiacat, COUNT
@@ -82,9 +83,15 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
 
     public void starUp(){
         if(star < 6) {
+            if(catType == CatType.maxwellcat){
+                numOfMaxwellCat -= 1;
+            }
             star += 1;
             CatType[] types = CatType.values();
             catType = types[random.nextInt(types.length - 1)];
+            if(catType == CatType.maxwellcat){
+                numOfMaxwellCat += 1;
+            }
             setSrcRect(catType, star);
         }
     }
@@ -92,6 +99,9 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
     public float getFinalFireCooltime(){
         float fireCool = 0.f;
         fireCool = (float)1 / star;
+        if(catType == CatType.happycat){
+            fireCool = fireCool / (1.0f + (star-1) * 0.2f);
+        }
         return fireCool;
     }
 
@@ -101,6 +111,9 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         if (scene == null){
             Log.e(TAG, "Scene stack is empty in addToScene() " + this.getClass().getSimpleName());
             return;
+        }
+        if(catType == CatType.maxwellcat){
+            numOfMaxwellCat -= 1;
         }
         scene.add(MainScene.Layer.touch, draggedCat);
         scene.remove(MainScene.Layer.cat, this);
@@ -225,6 +238,9 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
         fireElapsedTime = 0.f;
         fireCooltime = 0.1f;
         criticalPercent = 0.1f;
+        if(catType == CatType.maxwellcat){
+            numOfMaxwellCat += 1;
+        }
         Log.d(TAG, "Cat.init(" + System.identityHashCode(this) + ", " + slotIdx + ", " + type + ", " + initstar);
     }
 
@@ -264,6 +280,7 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
             case bananacat:
                 baseDamage = 12f;
                 finalDamage = ( baseDamage * upgradeScale * outgameUpgradeScale * ougameFinalDamageScale);
+                finalDamage = finalDamage + finalDamage * 0.01f * (20f - (WaveManager.waveRemainSeconds) * (2f + (star-1)));
                 break;
             case happycat:
                 baseDamage = 14f;
@@ -280,6 +297,8 @@ public class Cat extends Sprite implements IRecyclable, ITouchable {
             default:
                 finalDamage = 1.0f;
         }
+
+        finalDamage = finalDamage + finalDamage * numOfMaxwellCat * 0.1f;
 
         finalDamage = finalDamage * (1.0f + (random.nextFloat() * 0.2f) - 0.1f);
 
